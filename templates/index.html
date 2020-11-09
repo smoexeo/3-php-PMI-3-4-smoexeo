@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles/normalize.css">
+  <link rel="stylesheet" href="styles/index.css">
+</head>
+
+<body>
+  <!-- Место решения -->
+  <header>
+    <div class="wrapper">
+      <div class="left_column">
+        <h1>ToDo Сервис</h1>
+      </div>
+
+      <div class="right_column">
+        <ul class="mail_nav">
+          <li class="active_a_top"><a href="#">Задачи</a></li>
+          <li><a href="creator.php">Создать</a></li>
+        </ul>
+        <ul class="user_nav">
+          {if isset($username)}
+          <li class='username'><a href='#'>{$username}</a></li>
+          <li><a href='?act=exit'>Выход</a></li>
+          {else}
+          <li><a href='#login'>Войти</a></li>
+          {/if}
+        </ul>
+      </div>
+    </div>
+  </header>
+  <div class="login" id="login">
+    <a href='#' class='login_close'></a>
+    <div class="login_wrap">
+      <div class="login_content">
+        <a href="#" class="login_exit">X</a>
+        <h1>АВТОРИЗАЦИЯ</h1>
+        <form class='auth' method='POST'>
+          <fieldset>
+            <div class='input_field'>
+              <input type='text' name='username' maxlength='255' required placeholder='Логин'>
+            </div>
+            <div class='input_field'>
+              <input type='password' name='password' maxlength='255' required placeholder='Пароль'>
+            </div>
+            <div class='input_field'>
+              <input type='submit' id='login_button' value='Авторизоваться'>
+            </div>
+            <div class='input_field'>
+              <a href="#registration">Зарегистрироваться</a>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="login" id="registration">
+    <a href='#' class='login_close'></a>
+    <div class="login_wrap">
+      <div class="login_content">
+        <a href="#" class="login_exit">X</a>
+        <h1>РЕГИСТРАЦИЯ</h1>
+        <form class='auth' method='POST'>
+          <fieldset>
+            <div class='input_field'>
+              <input type='text' name='reg_username' maxlength='255' required placeholder='Логин'>
+            </div>
+            <div class='input_field'>
+              <input type='password' name='reg_password' maxlength='255' required placeholder='Пароль'>
+            </div>
+            <div class='input_field'>
+              <input type='submit' id='reg_button' value='Зарегистрироваться'>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="login" id="error">
+    <a href='#login' class='login_close'></a>
+    <div class="login_wrap">
+      <div class="login_content">
+        <a href="#login" class="login_exit">X</a>
+        <h1>Неправильный логин или пароль.</h1>
+      </div>
+    </div>
+  </div>
+  <div class="login" id="error_username">
+    <a href='#login' class='login_close'></a>
+    <div class="login_wrap">
+      <div class="login_content">
+        <a href="#login" class="login_exit">X</a>
+        <h1>Такой пользователь уже существует.</h1>
+      </div>
+    </div>
+  </div>
+  <main>
+    <div class="wrapper">
+      <nav>
+        <h2>Задачи</h2>
+        <ul class="nav-list">
+          <li>
+            <div class="active_a_nav"><a href="#">Все</a></div>
+          </li>
+          <li>
+            <a href="#">Предстоящие</a>
+          </li>
+          <li>
+            <a href="#">Выполненные</a>
+          </li>
+        </ul>
+      </nav>
+
+      <section>
+        <h2> Все </h2>
+        {foreach from=$tasks item=task}
+        <article class='{$task.complition}'>
+          <p>
+          <h3>{$task.title}</h3>
+          </p>
+          <p>{$task.content}</p>
+          <p><a href='?complete={$task.id}' id='complete'>Выполнено</a> &nbsp;·&nbsp; <a href='?uncomplete={$task.id}'
+              id='uncomplete'>Не выполнено</a> &nbsp;·&nbsp; <a href='?delete={$task.id}' id='delete'>Удалить</a></p>
+        </article>
+        {/foreach}
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrapper">
+      <p>
+        (С) Курс Web-программирования | ПГНИУ
+      </p>
+    </div>
+  </footer>
+</body>
+
+</html>

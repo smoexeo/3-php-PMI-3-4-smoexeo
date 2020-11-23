@@ -204,7 +204,8 @@ section{
 .nav-list a{
 	margin: var(--margin-small) var(--margin-base);
 }
-.active_a_nav{
+
+.nav{
 	width: 100%;
 	background-color: var(--color-dark);
 	color: var(--color-light-gray);
@@ -247,6 +248,14 @@ time{
 
 .uncompleted{
 	background: var(--color-dark);
+}
+
+.anchor {
+    position: fixed;
+}
+
+a{
+	cursor: pointer;
 }
 
 /*Footer*/

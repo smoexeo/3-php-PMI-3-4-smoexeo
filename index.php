@@ -11,7 +11,7 @@ $smarty->cache_dir = 'cache';
         
         function Tasks($pdo, $username)
         {
-          $sql = $pdo->prepare("SELECT tasks.id, tasks.title, tasks.content, tasks.status FROM tasks INNER JOIN users ON tasks.user_id=users.id WHERE users.username = ?");
+          $sql = $pdo->prepare("SELECT tasks.id, tasks.title, tasks.content, tasks.status FROM tasks INNER JOIN users ON tasks.user_id=users.id WHERE users.username = ? ORDER BY tasks.title");
           $sql->execute([$username]);
           if (isset($_SESSION['username']) && isset($_SESSION['password'])) {
             $tasks = [];
@@ -48,6 +48,26 @@ $smarty->cache_dir = 'cache';
           $result->execute([$username]);
           $row = $result->fetch();
           $result = $pdo->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ?");
+          $result->execute([$id,$row['id']]);
+        }
+
+        if (isset($_GET["complete"])) {
+          $id = $_GET["complete"];
+          $username = $_SESSION["username"];
+          $result = $pdo->prepare("SELECT id FROM users WHERE username = ?");
+          $result->execute([$username]);
+          $row = $result->fetch();
+          $result = $pdo->prepare("UPDATE tasks SET status=1 WHERE id = ? AND user_id = ?");
+          $result->execute([$id,$row['id']]);
+        }
+
+        if (isset($_GET["uncomplete"])) {
+          $id = $_GET["uncomplete"];
+          $username = $_SESSION["username"];
+          $result = $pdo->prepare("SELECT id FROM users WHERE username = ?");
+          $result->execute([$username]);
+          $row = $result->fetch();
+          $result = $pdo->prepare("UPDATE tasks SET status=0 WHERE id = ? AND user_id = ?");
           $result->execute([$id,$row['id']]);
         }
 

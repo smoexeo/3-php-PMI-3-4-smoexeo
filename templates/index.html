@@ -6,9 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="styles/normalize.css">
   <link rel="stylesheet" href="styles/index.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
 <body>
+  <div id="w" class="anchor"></div>
   <!-- Место решения -->
   <header>
     <div class="wrapper">
@@ -103,13 +105,13 @@
         <h2>Задачи</h2>
         <ul class="nav-list">
           <li>
-            <div class="active_a_nav"><a href="#">Все</a></div>
+            <div class="nav" id="all"><a onclick="sort(2)">Все</a></div>
           </li>
           <li>
-            <a href="#">Предстоящие</a>
+            <div id="next"><a onclick="sort(1)">Предстоящие</a></div>
           </li>
           <li>
-            <a href="#">Выполненные</a>
+            <div id="prev"><a onclick="sort(0)">Выполненные</a></div>
           </li>
         </ul>
       </nav>
@@ -117,18 +119,68 @@
       <section>
         <h2> Все </h2>
         {foreach from=$tasks item=task}
-        <article class='{$task.complition}'>
+        <article class='{$task.complition}' id='task{$task.id}'>
           <p>
           <h3>{$task.title}</h3>
           </p>
           <p>{$task.content}</p>
-          <p><a href='?complete={$task.id}' id='complete'>Выполнено</a> &nbsp;·&nbsp; <a href='?uncomplete={$task.id}'
-              id='uncomplete'>Не выполнено</a> &nbsp;·&nbsp; <a href='?delete={$task.id}' id='delete'>Удалить</a></p>
+          <p><a onclick='comp({$task.id})' id='complete'>Выполнено</a> &nbsp;·&nbsp; <a onclick='uncomp({$task.id})'
+              id='uncomplete'>Не выполнено</a> &nbsp;·&nbsp; <a onclick='del({$task.id})'>Удалить</a></p>
         </article>
         {/foreach}
       </section>
     </div>
   </main>
+
+  <script>
+    function del(id) {
+      $('#task' + id).remove();
+      $.get("index.php", {
+          delete: id
+        },
+        alert("Задача удалена")
+      )
+    };
+
+    function comp(id) {
+      $('#task' + id).removeClass('uncompleted');
+      $('#task' + id).addClass('completed');
+      $.get("index.php", {
+        complete: id
+      })
+    };
+
+    function uncomp(id) {
+      $('#task' + id).addClass('uncompleted');
+      $('#task' + id).removeClass('completed');
+      $.get("index.php", {
+        uncomplete: id
+      })
+    };
+
+    function sort(type) {
+      if(type==1){
+        $('.completed').hide();
+        $('.uncompleted').show();
+        $('#next').addClass('nav');
+        $('#all').removeClass('nav');
+        $('#prev').removeClass('nav');
+      } else if(type==0){
+        $('.completed').show();
+        $('.uncompleted').hide();
+        $('#next').removeClass('nav');
+        $('#all').removeClass('nav');
+        $('#prev').addClass('nav');
+      } else{
+        $('.completed').show();
+        $('.uncompleted').show();
+        $('#next').removeClass('nav');
+        $('#all').addClass('nav');
+        $('#prev').removeClass('nav');
+      }
+    };
+
+  </script>
 
   <footer>
     <div class="wrapper">
